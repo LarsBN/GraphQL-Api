@@ -35,11 +35,11 @@ namespace GraphQL
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
                 .AddType<BookType>()
-                .AddType<AddBookInputType>()
-                .AddType<AddBookPayloadType>()
+                //.AddType<AddBookInputType>()
+                //.AddType<AddBookPayloadType>()
                 .AddType<AuthorType>()
-                .AddType<AddAuthorInputType>()
-                .AddType<AddAuthorPayloadType>()
+                //.AddType<AddAuthorInputType>()
+                //.AddType<AddAuthorPayloadType>()
                 .AddFiltering()
                 .AddSorting();
         }
