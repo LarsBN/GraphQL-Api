@@ -32,11 +32,52 @@ namespace GraphQL.GraphQL
 
             return new AddBookPayload(book);
         }
+        [UseDbContext(typeof(AppDbContext))]
+        public async Task<UpdateBookPayload> UpdateBookAsync(
+                    UpdateBookInput input,
+                    [ScopedService] AppDbContext context)
+        {
+            if (input.Name.Length!=0 && input.Name is null)
+            {
+                return null;
+            }
+
+            Book? book = await context.Books.FindAsync(input.id);
+
+            if (book is null)
+            {
+                return null;
+            }
+            if (input.Genre.Length == 0)
+            {
+                return null;
+            }
+
+            if (input.Name.Length != 0)
+            {
+                book.Name = input.Name;
+            }
+
+            if (input.Genre.Length !=0)
+            {
+                book.Genre = input.Genre;
+            }
+
+            if (input.authorId == book.AuthorId)
+            {
+                book.AuthorId = input.authorId;
+            }
+            context.Books.Update(book);
+            await context.SaveChangesAsync();
+
+            return new UpdateBookPayload(book);
+        }
 
 
         [UseDbContext(typeof(AppDbContext))]
         [GraphQLDescription("Adds a author.")]
-        public async Task<AddAuthorPayload> AddAuthorAsync(AddAuthorInput input,
+        public async Task<AddAuthorPayload> AddAuthorAsync(
+            AddAuthorInput input,
             [ScopedService] AppDbContext context)
         {
             var author = new Author
@@ -50,6 +91,41 @@ namespace GraphQL.GraphQL
             await context.SaveChangesAsync();
 
             return new AddAuthorPayload(author);
+        }
+
+        public async Task<UpdateAuthorPayload> UpdateAuthorAsync(
+                    UpdateAuthorInput input,
+                    [ScopedService] AppDbContext context)
+        {
+            if (input.Name.Length != 0 && input.Name is null)
+            {
+                return null;
+            }
+
+            Author? author = await context.Authors.FindAsync(input.id);
+
+            if (author is null)
+            {
+                return null;
+            }
+            if (input.Age <= 0)
+            {
+                return null;
+            }
+
+            if (input.Name.Length != 0)
+            {
+                author.Name = input.Name;
+            }
+
+            if (input.id == author.Id)
+            {
+                author.Id = input.id;
+            }
+            context.Authors.Update(author);
+            await context.SaveChangesAsync();
+
+            return new UpdateAuthorPayload(author);
         }
     }
 }
