@@ -75,7 +75,6 @@ namespace GraphQL.GraphQL
 
 
         [UseDbContext(typeof(AppDbContext))]
-        [GraphQLDescription("Adds a author.")]
         public async Task<AddAuthorPayload> AddAuthorAsync(
             AddAuthorInput input,
             [ScopedService] AppDbContext context)
@@ -92,7 +91,7 @@ namespace GraphQL.GraphQL
 
             return new AddAuthorPayload(author);
         }
-
+        [UseDbContext(typeof(AppDbContext))]
         public async Task<UpdateAuthorPayload> UpdateAuthorAsync(
                     UpdateAuthorInput input,
                     [ScopedService] AppDbContext context)
